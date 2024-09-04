@@ -83,10 +83,18 @@ const Board = () => {
         }
 
         const handleMouseMove = (e) => {
-            if (!shouldDraw.current) return
-            drawLine(e.clientX || e.touches[0].clientX, e.clientY || e.touches[0].clientY)
-            socket.emit('drawLine', {x: e.clientX || e.touches[0].clientX, y: e.clientY || e.touches[0].clientY})
-        }
+            if (!shouldDraw.current) return;
+        
+            
+            const clientX = e.clientX || (e.touches && e.touches[0]?.clientX);
+            const clientY = e.clientY || (e.touches && e.touches[0]?.clientY);
+        
+            if (clientX !== undefined && clientY !== undefined) {
+                drawLine(clientX, clientY);
+                socket.emit('drawLine', { x: clientX, y: clientY });
+            }
+        };
+        
 
         const handleMouseUp = (e) => {
             shouldDraw.current = false
